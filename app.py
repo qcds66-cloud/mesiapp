@@ -385,7 +385,7 @@ category_name = st.sidebar.selectbox("請選擇課別：", list(CATEGORIES.keys(
 current_dataset = CATEGORIES[category_name]
 
 # ================= 主畫面 UI =================
-st.title("日文綜合學習大師")
+st.title("日語單字學習")
 
 # 顯示被選擇的課別標籤
 st.markdown(f"""
@@ -522,7 +522,7 @@ app_component_code = f"""
     <div id="wordTitle" class="word-title"></div>
     <div id="wordMeaning" class="meaning"></div>
     <hr style="border: none; border-top: 1px solid #C4B097; margin: 15px 0;">
-    <div class="ex-title">例句 1：</div>
+   <! <div class="ex-title">例句 1：</div> >
     <div id="ex1Kanji" class="ex-kanji"></div>
     <div id="ex1Kana" class="ex-kana"></div>
     <div id="ex1Cn" class="ex-cn"></div>
