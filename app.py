@@ -1,7 +1,5 @@
-import os
-import time
 import streamlit as st
-from gtts import gTTS
+import streamlit.components.v1 as components
 
 # ================= 頁面基礎設定 =================
 st.set_page_config(
@@ -57,7 +55,23 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ================= 資料庫載入 (完整無刪減) =================
+# ================= 瀏覽器原生 TTS 工具函式 =================
+def speak_js(text):
+    """ 利用 HTML5 Web Speech API 在前端直接播放日語語音 """
+    js_code = f"""
+    <script>
+        if ('speechSynthesis' in window) {{
+            window.speechSynthesis.cancel();
+            var msg = new SpeechSynthesisUtterance("{text}");
+            msg.lang = 'ja-JP';
+            msg.rate = 0.9;
+            window.speechSynthesis.speak(msg);
+        }}
+    </script>
+    """
+    components.html(js_code, height=0, width=0)
+
+# ================= 資料庫載入 =================
 @st.cache_data
 def load_all_data():
     food_data = [
@@ -194,7 +208,7 @@ def load_all_data():
         {"word": "ゴミばこ", "kanji": "ゴミ箱", "meaning": "垃圾桶 (Trash can)", "ex1_kanji": "ゴミをゴミ箱に捨てます。", "ex1_kana": "ごみをごみばこにすてます", "ex1_cn": "把垃圾丟進垃圾桶。", "ex2_kanji": "新しいゴミ箱を買います。", "ex2_kana": "あたらしいごみばこをかいます", "ex2_cn": "買一個新的垃圾桶。"},
         {"word": "かみそり", "kanji": "剃刀", "meaning": "刮鬍刀、剃刀 (Razor)", "ex1_kanji": "剃刀でヒゲをそります。", "ex1_kana": "かみそりでひげをそります", "ex1_cn": "用刮鬍刀刮鬍子。", "ex2_kanji": "新しい剃刀を交換します。", "ex2_kana": "あたらしいかみそりをこうかんします", "ex2_cn": "更換新的刮鬍刀。"},
         {"word": "ハンガー", "kanji": "ハンガー", "meaning": "衣架 (Hanger)", "ex1_kanji": "シャツをハンガーにかけます。", "ex1_kana": "しゃつをはんがーにかめます", "ex1_cn": "把襯衫掛在衣架上。", "ex2_kanji": "木製のハンガーを使います。", "ex2_kana": "もくせいのはんがーをつかいます", "ex2_cn": "使用木製衣架。"},
-        {"word": "まど", "kanji": "窓", "meaning": "窗戶 (Window)", "ex1_kanji": "朝に窓を開けて換気をします。", "ex1_kana": "あさにまどをあけてかんきをします", "ex1_cn": "早上打開窗戶換氣。", "ex2_kanji": "窓から外の景色を見ます。", "ex2_kana": "まどからそとのけしきをみます", "ex2_cn": "從窗戶看外面的風景。"},
+        {"word": "まど", "kanji": "窓", "meaning": "窗戶 (Window)", "ex1_kanji": "朝に窓を開けて換気をします。", "ex1_kana": "あさにまどをあけてかんきをします", "ex1_cn": "早上打開窗戶換氣。", "ex2_kanji": "窓から外の景色を見ます。", "ex2_kana": "まどからそとのけしきをみます", "ex2_cn": "從窗戶看外面的景色。"},
         {"word": "カーテン", "kanji": "カーテン", "meaning": "窗簾 (Curtain)", "ex1_kanji": "カーテンを閉めて部屋を暗くします。", "ex1_kana": "かーてんをしめてへやをくらくします", "ex1_cn": "拉上窗簾把房間變暗。", "ex2_kanji": "白いカーテンを洗います。", "ex2_kana": "しろいかーてんをあらいます", "ex2_cn": "洗白窗簾。"},
         {"word": "まほうびん", "kanji": "魔法瓶", "meaning": "保溫瓶 (Thermos flask)", "ex1_kanji": "魔法瓶にお湯を入れます。", "ex1_kana": "まほうびんにおゆをいれます", "ex1_cn": "把熱水裝進保溫瓶裡。", "ex2_kanji": "魔法瓶の冷めないお茶です。", "ex2_kana": "まほうびんのさめないおちゃです", "ex2_cn": "是保溫瓶裡不會變涼的茶。"},
         {"word": "ぞうきん", "kanji": "雑巾", "meaning": "抹布 (Cleaning cloth / Rag)", "ex1_kanji": "雑巾で床を拭きます。", "ex1_kana": "ぞうきんでゆかをふきます", "ex1_cn": "用抹布擦地板。", "ex2_kanji": "汚れた雑巾を洗います。", "ex2_kana": "よごれたぞうきんをあらいます", "ex2_cn": "清洗髒抹布。"},
@@ -325,7 +339,7 @@ def load_all_data():
         {"word": "しんせき", "kanji": "親戚", "meaning": "親戚 【對自己人的稱呼／自稱】", "ex1_kanji": "親戚の家に行きます。", "ex1_kana": "しんせきのいえにいきます", "ex1_cn": "去親戚家。", "ex2_kanji": "お正月に親戚が集まります。", "ex2_kana": "おしょうがつにしんせきがあつまります", "ex2_cn": "過年時親戚聚在一起。"},
         {"word": "ごしんせき", "kanji": "ご親戚", "meaning": "親戚 【對別人的稱呼／尊稱】", "ex1_kanji": "ご親戚はどちらにいますか。", "ex1_kana": "ごしんせきはどちらにいますか", "ex1_cn": "您的親戚在哪裡呢？", "ex2_kanji": "ご親戚によろしくお伝えください。", "ex2_kana": "ごしんせきによろしくおつたえください", "ex2_cn": "請代我向您的親戚問好。"},
         {"word": "かぞく", "kanji": "家族", "meaning": "家人、家族 【對自己人的稱呼／自稱】", "ex1_kanji": "私の家族は四人です。", "ex1_kana": "わたしのかぞくはよにんです", "ex1_cn": "我一家有四個人。", "ex2_kanji": "家族で旅行に行きます。", "ex2_kana": "かぞくでりょこうにいきます", "ex2_cn": "全家一起去旅行。"},
-        {"word": "ごかぞく", "kanji": "ご家族", "meaning": "家人、家族 【對別人的稱呼／尊稱】", "ex1_kanji": "ご家族はお元気ですか。", "ex1_kana": "ごかぞくはおげんきですか", "ex1_cn": "您的家人身體好嗎？", "ex2_kanji": "ご家族によろしくお伝えください。", "ex2_kana": "ごかぞくによろしくおつたえください", "ex2_cn": "請代我向您的家人問好。"}
+        {"word": "ごかぞく", "kanji": "ご家族", "meaning": "家人、家族 【對別人的稱呼／尊稱】", "ex1_kanji": "ご家族はお元気ですか。", "ex1_kana": "ご家族はおげんきですか", "ex1_cn": "您的家人身體好嗎？", "ex2_kanji": "ご家族によろしくお伝えください。", "ex2_kana": "ごかぞくによろしくおつたえください", "ex2_cn": "請代我向您的家人問好。"}
     ]
 
     emotion_data = [
@@ -408,15 +422,6 @@ def load_all_data():
 CATEGORIES = load_all_data()
 
 # ================= 工具函式 =================
-@st.cache_data
-def generate_audio(text):
-    """ 使用 gTTS 產生語音並快取音訊，減少重複網路請求 """
-    fp = io.BytesIO()
-    tts = gTTS(text=text, lang="ja", slow=False)
-    tts.write_to_fp(fp)
-    fp.seek(0)
-    return fp.read()
-
 def highlight_particles(text):
     """ 精準匹配獨立助詞並標上紅色 """
     multi_particles = {"から", "より", "まで"}
@@ -434,8 +439,6 @@ def highlight_particles(text):
 # ================= Session State 初始化 =================
 if "current_index" not in st.session_state:
     st.session_state.current_index = 0
-if "auto_play" not in st.session_state:
-    st.session_state.auto_play = False
 
 # ================= 側邊欄控制區 =================
 st.sidebar.title("📖 學習類別選單")
@@ -447,14 +450,10 @@ current_dataset = CATEGORIES[category_name]
 if "last_category" not in st.session_state or st.session_state.last_category != category_name:
     st.session_state.current_index = 0
     st.session_state.last_category = category_name
-    st.session_state.auto_play = False
-
-pause_seconds = st.sidebar.number_input("連續朗讀間隔時間（秒）", min_value=1, max_value=10, value=4)
 
 st.sidebar.markdown("---")
 if st.sidebar.button("🔄 重置到本類別第一個單字"):
     st.session_state.current_index = 0
-    st.session_state.auto_play = False
     st.rerun()
 
 # ================= 主畫面 UI =================
@@ -489,17 +488,19 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# 語音播放區塊
-col_audio1, col_audio2 = st.columns(2)
+# 語音播放區塊 (採用瀏覽器 Web Speech API)
+col_audio1, col_audio2, col_audio3 = st.columns(3)
 with col_audio1:
-    if st.button("🔊 朗讀例句 1"):
-        audio_bytes = generate_audio(item["ex1_kana"])
-        st.audio(audio_bytes, format="audio/mp3", autoplay=True)
+    if st.button("🔊 朗讀單字"):
+        speak_js(item["word"])
 
 with col_audio2:
+    if st.button("🔊 朗讀例句 1"):
+        speak_js(item["ex1_kana"])
+
+with col_audio3:
     if st.button("🔊 朗讀例句 2"):
-        audio_bytes = generate_audio(item["ex2_kana"])
-        st.audio(audio_bytes, format="audio/mp3", autoplay=True)
+        speak_js(item["ex2_kana"])
 
 # 上下單字切換與進度指示
 st.markdown("---")
@@ -519,30 +520,3 @@ with col_next:
         if st.session_state.current_index < len(current_dataset) - 1:
             st.session_state.current_index += 1
             st.rerun()
-
-# 自動連續朗讀開關
-st.markdown("---")
-auto_col1, auto_col2 = st.columns([1, 1])
-
-with auto_col1:
-    if not st.session_state.auto_play:
-        if st.button("▶️ 開始連續朗讀", use_container_width=True):
-            st.session_state.auto_play = True
-            st.rerun()
-    else:
-        if st.button("⏹️ 停止連續朗讀", type="primary", use_container_width=True):
-            st.session_state.auto_play = False
-            st.rerun()
-
-# 連續播放核心邏輯
-if st.session_state.auto_play:
-    audio_word = generate_audio(item["word"])
-    st.audio(audio_word, format="audio/mp3", autoplay=True)
-    
-    time.sleep(pause_seconds)
-    if st.session_state.current_index < len(current_dataset) - 1:
-        st.session_state.current_index += 1
-        st.rerun()
-    else:
-        st.session_state.auto_play = False
-        st.success("🎉 已完成本類別所有單字朗讀！")
