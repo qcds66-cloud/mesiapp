@@ -380,7 +380,7 @@ def load_all_data():
 CATEGORIES = load_all_data()
 
 # ================= 側邊欄控制區 =================
-st.sidebar.title("📖 學習課別選單")
+st.sidebar.title("學習課別選單")
 category_name = st.sidebar.selectbox("請選擇課別：", list(CATEGORIES.keys()))
 current_dataset = CATEGORIES[category_name]
 
@@ -521,13 +521,12 @@ app_component_code = f"""
 <div class="card">
     <div id="wordTitle" class="word-title"></div>
     <div id="wordMeaning" class="meaning"></div>
-    <hr style="border: none; border-top: 1px solid #C4B097; margin: 15px 0;">
+    <hr style="border: none; border-top: 1px solid #C4B097; margin: 10px 0;">
     <div id="ex1Kanji" class="ex-kanji"></div>
     <div id="ex1Kana" class="ex-kana"></div>
     <div id="ex1Cn" class="ex-cn"></div>
-    <hr style="border: none; border-top: 1px solid #C4B097; margin: 15px 0;">
-    <div class="ex-title">例句 2：</div>
-    <div id="ex2Kanji" class="ex-kanji"></div>
+    <hr style="border: none; border-top: 1px solid #C4B097; margin: 10px 0;">
+       <div id="ex2Kanji" class="ex-kanji"></div>
     <div id="ex2Kana" class="ex-kana"></div>
     <div id="ex2Cn" class="ex-cn"></div>
 </div>
