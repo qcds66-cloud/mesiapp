@@ -522,7 +522,6 @@ app_component_code = f"""
     <div id="wordTitle" class="word-title"></div>
     <div id="wordMeaning" class="meaning"></div>
     <hr style="border: none; border-top: 1px solid #C4B097; margin: 15px 0;">
-   <! <div class="ex-title">例句 1：</div> >
     <div id="ex1Kanji" class="ex-kanji"></div>
     <div id="ex1Kana" class="ex-kana"></div>
     <div id="ex1Cn" class="ex-cn"></div>
