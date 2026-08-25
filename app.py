@@ -1,7 +1,7 @@
-import io
+import os
 import time
 import streamlit as st
-from gTTS import gTTS
+from gtts import gTTS
 
 # ================= 頁面基礎設定 =================
 st.set_page_config(
