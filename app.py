@@ -3,7 +3,7 @@ import json
 
 # ================= 頁面基礎設定 =================
 st.set_page_config(
-    page_title="日文綜合學習大師",
+    page_title="日語單字學習",
     page_icon="📚",
     layout="centered"
 )
@@ -21,9 +21,9 @@ st.markdown("""
         padding: 12px 18px;
         border-radius: 8px;
         font-weight: bold;
-        font-size: 18px;
+        font-size: 14px;
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 </style>
