@@ -422,7 +422,7 @@ app_component_code = f"""
         font-size: 28px;
         font-weight: bold;
         color: #4A403A;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
     }}
     .meaning {{
         font-size: 18px;
@@ -431,7 +431,7 @@ app_component_code = f"""
     }}
     .ex-title {{
         font-weight: bold;
-        margin-top: 10px;
+        margin-top: 3px;
     }}
     .ex-kanji {{
         font-size: 20px;
@@ -441,12 +441,12 @@ app_component_code = f"""
     .ex-kana {{
         font-size: 16px;
         color: #4A90E2;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
     }}
     .ex-cn {{
         font-size: 16px;
         color: #6B5B52;
-        margin-bottom: 12px;
+        margin-bottom: 3px;
     }}
     .particle {{
         color: #D9534F;
